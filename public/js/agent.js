@@ -1,33 +1,90 @@
 class Agent {
-    constructor(x, y, world) {
+    defaults() {
         this.size = 20;
         this.maxSpeed = 0.8;
-        this.body = Matter.Bodies.circle(x, y, this.size);
-        this.body.frictionAir = 0.1;
-
-        Matter.World.add(world, [this.body]);
+        this.dV = 0.01;
+        this.friction = 0.1;
+        this.lastShot = 0;
+        this.shotCd = 1000;
+        this.shotSpeed = 2;
+        this.shotRange = 300;
+        this.xp = 0;
     }
 
-    iterate(inputs) {
+    constructor(x, y, controller, engine) {
+        this.defaults();
+
+        this.controller = controller;
+        this.engine = engine;
+
+        this.body = Matter.Bodies.circle(x, y, this.size);
+        this.body.frictionAir = this.friction;
+
+        Matter.World.add(this.engine.world, [this.body]);
+        Matter.Events.on(this.engine, 'beforeUpdate', this.iterate.bind(this));
+        Matter.Events.on(this.engine, 'shot:' + this.body.id, this.damaged.bind(this));
+        Matter.Events.on(this.engine, 'xp:' + this.body.id, this.pickupXP.bind(this));
+    }
+
+    iterate(e) {
+        var inputs = this.controller.iterate();
+
+        this.lookAt(inputs.mouseX, inputs.mouseY);
+
+        Matter.Body.applyForce(
+            this.body,
+            this.body.position,
+            this.move(
+                inputs.up,
+                inputs.down,
+                inputs.left,
+                inputs.right
+            )
+        );
+
+        this.clampVel();
+
+        if (inputs.click && this.canShoot(e.timestamp)) {
+            this.shoot(e.timestamp);
+        }
+    }
+
+    damaged(shot) {
+        console.log("Ouch");
+    }
+
+    pickupXP(xp) {
+        Matter.World.remove(this.engine.world, xp.body);
+        this.xp += 1;
+    }
+
+    move(up, down, left, right) {
+        var dir = Matter.Vector.create();
+        if (up && this.body.velocity.y > -this.maxSpeed) {
+            dir = Matter.Vector.add(dir, {x:0, y: -this.dV});
+        }
+        if (down && this.body.velocity.y < this.maxSpeed) {
+            dir = Matter.Vector.add(dir, {x:0, y: this.dV});
+        }
+        if (left && this.body.velocity.x > -this.maxSpeed) {
+            dir = Matter.Vector.add(dir, {x: -this.dV, y: 0});
+        }
+        if (right && this.body.velocity.x < this.maxSpeed) {
+            dir = Matter.Vector.add(dir, {x: this.dV, y: 0});
+        }
+        return dir;
+    }
+
+    lookAt(x, y) {
         var lookAngle = Matter.Vector.angle(
             this.body.position,
-            Matter.Vector.create(inputs.mouseX, inputs.mouseY)
+            Matter.Vector.create(x, y)
         );
+
         Matter.Body.rotate(this.body, lookAngle - this.body.angle);
+    }
 
-        if (inputs.up && this.body.velocity.y > -this.maxSpeed) {
-            Matter.Body.applyForce(this.body, this.body.position, {x:0, y: -0.01});
-        }
-        if (inputs.down && this.body.velocity.y < this.maxSpeed) {
-            Matter.Body.applyForce(this.body, this.body.position, {x:0, y: 0.01});
-        }
-        if (inputs.left && this.body.velocity.x > -this.maxSpeed) {
-            Matter.Body.applyForce(this.body, this.body.position, {x:-0.01, y: 0});
-        }
-        if (inputs.right && this.body.velocity.x < this.maxSpeed) {
-            Matter.Body.applyForce(this.body, this.body.position, {x:0.01, y: 0});
-        }
-
+    clampVel() {
         Matter.Body.setVelocity(
             this.body,
             {
@@ -35,5 +92,20 @@ class Agent {
                 y: Matter.Common.clamp(this.body.velocity.y, -this.maxSpeed, this.maxSpeed)
             }
         );
+    }
+
+    shoot(timestamp) {
+        this.lastShot = timestamp;
+        var shot = new Shot(
+            this.body,
+            this.body.angle,
+            this.shotSpeed,
+            this.shotRange,
+            this.engine
+        );
+    }
+
+    canShoot(timestamp) {
+        return (timestamp - this.lastShot) > this.shotCd;
     }
 }

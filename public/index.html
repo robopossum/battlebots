@@ -4,7 +4,10 @@
         <script type="text/javascript" src="js/matter.min.js"></script>
         <script type="text/javascript" src="js/pathseg.js"></script>
         <script type="text/javascript" src="js/agent.js"></script>
+        <script type="text/javascript" src="js/xp.js"></script>
+        <script type="text/javascript" src="js/shot.js"></script>
         <script type="text/javascript" src="js/key-controller.js"></script>
+        <script type="text/javascript" src="js/dummy-controller.js"></script>
         <script type="text/javascript">
             window.onload=function() {
                 var Engine = Matter.Engine,
@@ -24,6 +27,7 @@
                         width: 800,
                         height: 600,
                         hasBounds: true,
+                        wireframes: false,
                         showAngleIndicator: true
                     }
                 });
@@ -37,14 +41,10 @@
                     Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
                 ]);
 
-                var controller = new KeyController();
-                var agent = new Agent(400, 300, engine.world);
+                var agent = new Agent(400, 300, new KeyController(), engine);
+                var dummy = new Agent(750, 500, new DummyController(), engine);
+                var xp = new XP(600, 500, engine);
 
-                Events.on(engine, 'beforeUpdate', function () {
-                    controller.iterate();
-                    agent.iterate(controller.inputs);
-                });
-                
                 // run the engine
                 Engine.run(engine);
                 
