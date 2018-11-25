@@ -24,6 +24,7 @@ class Shot {
         Matter.Body.setVelocity(this.body, this.vel);
 
         Matter.Events.on(this.engine, 'collisionStart', this.collide.bind(this));
+        Matter.Events.on(this.engine, 'beforeUpdate', this.checkRange.bind(this));
 
         Matter.World.add(this.engine.world, this.body);
     }
@@ -40,6 +41,12 @@ class Shot {
                 Matter.World.remove(this.engine.world, this.body);
                 Matter.Events.off(this.engine, 'collisionStart', this.collide.bind(this));
             }
+        }
+    }
+
+    checkRange() {
+        if (Matter.Vector.magnitude(Matter.Vector.sub(this.body.position, this.start)) > this.range) {
+            Matter.World.remove(this.engine.world, this.body);
         }
     }
 }
