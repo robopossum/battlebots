@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "matter-js": "^0.14.2",
-    "pathseg": "^1.2.0"
+    "pathseg": "^1.2.0",
+    "underscore": "^1.9.1"
   }
 }

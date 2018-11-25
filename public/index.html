@@ -3,6 +3,8 @@
         <title>Evo2 - Now with Paper</title>
         <script type="text/javascript" src="js/matter.min.js"></script>
         <script type="text/javascript" src="js/pathseg.js"></script>
+        <script type="text/javascript" src="js/underscore-min.js"></script>
+        <script type="text/javascript" src="js/raycast.js"></script>
         <script type="text/javascript" src="js/agent.js"></script>
         <script type="text/javascript" src="js/xp.js"></script>
         <script type="text/javascript" src="js/shot.js"></script>
@@ -42,7 +44,7 @@
                 ]);
 
                 var agent = new Agent(400, 300, new KeyController(), engine);
-                var dummy = new Agent(750, 500, new DummyController(), engine);
+                //var dummy = new Agent(750, 500, new DummyController(), engine);
                 var xp = new XP(600, 500, engine);
 
                 // run the engine
