@@ -23,6 +23,8 @@ class Shot {
         Matter.Body.rotate(this.body, angle + Math.PI);
         Matter.Body.setVelocity(this.body, this.vel);
 
+        this.body.role = 'shot';
+
         Matter.Events.on(this.engine, 'collisionStart', this.collide.bind(this));
 
         Matter.World.add(this.engine.world, this.body);

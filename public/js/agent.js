@@ -9,6 +9,11 @@ class Agent {
         this.shotSpeed = 2;
         this.shotRange = 300;
         this.xp = 0;
+        this.hp = 100;
+        this.sensors = [
+            {angle: 0},
+        ];
+        this.sensorDist = 100;
     }
 
     constructor(x, y, controller, engine) {
@@ -19,8 +24,9 @@ class Agent {
 
         this.body = Matter.Bodies.circle(x, y, this.size);
         this.body.frictionAir = this.friction;
-
+        this.body.role = 'agent';
         Matter.World.add(this.engine.world, [this.body]);
+
         Matter.Events.on(this.engine, 'beforeUpdate', this.iterate.bind(this));
         Matter.Events.on(this.engine, 'shot:' + this.body.id, this.damaged.bind(this));
         Matter.Events.on(this.engine, 'xp:' + this.body.id, this.pickupXP.bind(this));
@@ -81,7 +87,28 @@ class Agent {
             Matter.Vector.create(x, y)
         );
 
+        for (var i = 0; i < this.sensors.length; i++) {
+            this.updateSensor(lookAngle, this.sensors[i]);
+        }
+
         Matter.Body.rotate(this.body, lookAngle - this.body.angle);
+    }
+
+    updateSensor(look, sensor) {
+        var end = Matter.Vector.create(1);
+        end = Matter.Vector.rotate(end, look + ((sensor.angle / 360) * 2 * Math.PI));
+        end = Matter.Vector.mult(end, this.sensorDist);
+        end = Matter.Vector.add(this.body.position, end);
+
+        var collisions = raycast(_.without(this.engine.world.bodies, this.body), this.body.position, end);
+
+        if (collisions.length > 0) {
+            sensor.length = Matter.Vector.magnitude(Matter.Vector.sub(collisions[0].point, this.body.position));
+            sensor.hitting = collisions[0].body.role || 'wall';
+        } else {
+            sensor.length = this.sensorDist;
+            sensor.hitting = '';
+        }
     }
 
     clampVel() {

@@ -11,6 +11,8 @@ class XP {
             }
         });
 
+        this.body.role = 'xp';
+
         Matter.Events.on(this.engine, 'collisionStart', this.collide.bind(this));
 
         Matter.World.add(engine.world, [this.body]);
