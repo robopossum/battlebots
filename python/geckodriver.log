@@ -1,0 +1,16 @@
+1549063148424	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.Lfu5JW9gifX8"
+1549063149305	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: resource://pdf.js/
+1549063149306	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: about:reader*
+1549063152820	Marionette	INFO	Listening on port 33507
+1549063152854	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: http://localhost:3000/js/key-controller.js, line 41: unreachable code after return statement
+JavaScript error: http://localhost:3000/js/agent.js, line 41: InvalidStateError: An attempt was made to use an object that is not, or is no longer, usable
+JavaScript warning: http://localhost:3000/js/key-controller.js, line 41: unreachable code after return statement
+console.error: BroadcastService: 
+  receivedBroadcastMessage: handler for
+  remote-settings/monitor_changes
+  threw error:
+  Message: Error: Polling for changes failed: NetworkError when attempting to fetch resource..
+  Stack:
+    remoteSettingsFunction/remoteSettings.pollChanges@resource://services-settings/remote-settings.js:750:13
+

@@ -37,6 +37,7 @@ class KeyController {
     }
 
     iterate() {
+	return clientControl;
         this.inputs.mouseX = this.mouse.position.x;
         this.inputs.mouseY = this.mouse.position.y;
         return this.inputs;

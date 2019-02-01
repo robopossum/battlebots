@@ -9,8 +9,12 @@
         <script type="text/javascript" src="js/xp.js"></script>
         <script type="text/javascript" src="js/shot.js"></script>
         <script type="text/javascript" src="js/key-controller.js"></script>
-        <script type="text/javascript" src="js/dummy-controller.js"></script>
-        <script type="text/javascript">
+	<script type="text/javascript" src="js/dummy-controller.js"></script>
+	<script type="text/javascript">
+	var clientState = {};
+	var clientControl = {};
+	window.WebSocket = window.WebSocket || window.MozWebSocket;
+	var connection = new WebSocket('ws://localhost:3000');
             window.onload=function() {
                 var Engine = Matter.Engine,
                     Render = Matter.Render,
@@ -52,6 +56,15 @@
                 
                 // run the renderer
                 Render.run(render);
+
+
+
+                connection.onmessage = function (message) {
+                  var json = JSON.parse(message.data);
+	          console.log(json);
+                };
+
+	//	connection.send("Here is a message");
             }
         </script>
     </head>
