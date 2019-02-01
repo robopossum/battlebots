@@ -3,6 +3,7 @@ class Agent {
         this.size = 20;
         this.maxSpeed = 0.8;
         this.dV = 0.01;
+        this.aV = ((10 / 360) * 2 * Math.PI);
         this.friction = 0.1;
         this.lastShot = 0;
         this.shotCd = 1000;
@@ -11,7 +12,27 @@ class Agent {
         this.xp = 0;
         this.hp = 100;
         this.sensors = [
+            {angle: -50},
+            {angle: -45},
+            {angle: -40},
+            {angle: -35},
+            {angle: -30},
+            {angle: -25},
+            {angle: -20},
+            {angle: -15},
+            {angle: -10},
+            {angle: -5},
             {angle: 0},
+            {angle: 5},
+            {angle: 10},
+            {angle: 15},
+            {angle: 20},
+            {angle: 25},
+            {angle: 30},
+            {angle: 35},
+            {angle: 40},
+            {angle: 45},
+            {angle: 50},
         ];
         this.sensorDist = 100;
 	this.roleMap = {
@@ -62,7 +83,7 @@ class Agent {
 	};
         var inputs = this.controller.iterate();
 
-        this.lookAt(inputs.mouseX, inputs.mouseY);
+        this.look(inputs);
 
         Matter.Body.applyForce(
             this.body,
@@ -77,7 +98,7 @@ class Agent {
 
         this.clampVel();
 
-        if (inputs.click && this.canShoot(e.timestamp)) {
+        if (inputs.shoot && this.canShoot(e.timestamp)) {
             this.shoot(e.timestamp);
         }
     }
@@ -108,17 +129,16 @@ class Agent {
         return dir;
     }
 
-    lookAt(x, y) {
-        var lookAngle = Matter.Vector.angle(
-            this.body.position,
-            Matter.Vector.create(x, y)
-        );
+    look(input) {
+        let dA = 0;
+        dA += input.turnRight ? this.aV : 0;
+        dA -= input.turnLeft ? this.aV : 0;
 
         for (var i = 0; i < this.sensors.length; i++) {
-            this.updateSensor(lookAngle, this.sensors[i]);
+            this.updateSensor(this.body.angle + dA, this.sensors[i]);
         }
 
-        Matter.Body.rotate(this.body, lookAngle - this.body.angle);
+        Matter.Body.rotate(this.body, dA);
     }
 
     updateSensor(look, sensor) {
