@@ -12,7 +12,27 @@ class Agent {
         this.xp = 0;
         this.hp = 100;
         this.sensors = [
+            {angle: -50},
+            {angle: -45},
+            {angle: -40},
+            {angle: -35},
+            {angle: -30},
+            {angle: -25},
+            {angle: -20},
+            {angle: -15},
+            {angle: -10},
+            {angle: -5},
             {angle: 0},
+            {angle: 5},
+            {angle: 10},
+            {angle: 15},
+            {angle: 20},
+            {angle: 25},
+            {angle: 30},
+            {angle: 35},
+            {angle: 40},
+            {angle: 45},
+            {angle: 50},
         ];
         this.sensorDist = 100;
     }
