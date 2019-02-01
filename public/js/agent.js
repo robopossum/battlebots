@@ -38,7 +38,8 @@ class Agent {
 	this.roleMap = {
 	  agent: 1,
           xp: 2,
-          wall: 3
+          shot: 3,
+          wall: 4
 	};
     }
 
