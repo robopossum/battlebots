@@ -3,11 +3,11 @@ class Agent {
         this.size = 20;
         this.maxSpeed = 0.8;
         this.dV = 0.01;
-        this.aV = ((10 / 360) * 2 * Math.PI);
+        this.aV = ((5 / 360) * 2 * Math.PI);
         this.friction = 0.1;
         this.lastShot = 0;
         this.shotCd = 1000;
-        this.shotSpeed = 2;
+        this.shotSpeed = 5;
         this.shotRange = 300;
         this.xp = 0;
         this.hp = 100;
@@ -115,18 +115,19 @@ class Agent {
 
     move(up, down, left, right) {
         var dir = Matter.Vector.create();
-        if (up && this.body.velocity.y > -this.maxSpeed) {
+        if (up) {
             dir = Matter.Vector.add(dir, {x:0, y: -this.dV});
         }
-        if (down && this.body.velocity.y < this.maxSpeed) {
+        if (down) {
             dir = Matter.Vector.add(dir, {x:0, y: this.dV});
         }
-        if (left && this.body.velocity.x > -this.maxSpeed) {
+        if (left) {
             dir = Matter.Vector.add(dir, {x: -this.dV, y: 0});
         }
-        if (right && this.body.velocity.x < this.maxSpeed) {
+        if (right) {
             dir = Matter.Vector.add(dir, {x: this.dV, y: 0});
         }
+        dir = Matter.Vector.rotate(dir, this.body.angle + Math.PI * 0.5);
         return dir;
     }
 
