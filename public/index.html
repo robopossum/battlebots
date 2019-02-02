@@ -11,60 +11,27 @@
         <script type="text/javascript" src="js/key-controller.js"></script>
 	<script type="text/javascript" src="js/dummy-controller.js"></script>
 	<script type="text/javascript">
-	var clientState = {};
-	var clientControl = {};
-	window.WebSocket = window.WebSocket || window.MozWebSocket;
-	var connection = new WebSocket('ws://localhost:3000');
+        <script type="text/javascript" src="js/dummy-controller.js"></script>
+        <script type="text/javascript" src="js/world.js"></script>
+        <script type="text/javascript">
+	    var clientState = {};
+	    var clientControl = {};
+	    window.WebSocket = window.WebSocket || window.MozWebSocket;
+	    var connection = new WebSocket('ws://localhost:3000');
+            var game = {};
             window.onload=function() {
-                var Engine = Matter.Engine,
-                    Render = Matter.Render,
-                    World = Matter.World,
-                    Events = Matter.Events,
-                    Bodies = Matter.Bodies;
-                
-                // create an engine
-                var engine = Engine.create();
-                
-                // create a renderer
-                var render = Render.create({
-                    element: document.body,
-                    engine: engine,
-                    options: {
-                        width: 800,
-                        height: 600,
-                        hasBounds: true,
-                        wireframes: false,
-                        showAngleIndicator: true
-                    }
-                });
+                game = new GameWorld(2000, 1200, document.body);
 
-                engine.world.gravity.y = 0;
+                var agent = new Agent(400, 300, new KeyController(), game.engine);
 
-                World.add(engine.world, [
-                    Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
-                    Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
-                    Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
-                    Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
-                ]);
+                game.spawnXp(40);
 
-                var agent = new Agent(400, 300, new KeyController(), engine);
-                //var dummy = new Agent(750, 500, new DummyController(), engine);
-                var xp = new XP(600, 500, engine);
-
-                // run the engine
-                Engine.run(engine);
-                
-                // run the renderer
-                Render.run(render);
-
-
+		game.run();
 
                 connection.onmessage = function (message) {
                   var json = JSON.parse(message.data);
 	          console.log(json);
                 };
-
-	//	connection.send("Here is a message");
             }
         </script>
     </head>
