@@ -34,7 +34,13 @@ class Agent {
             {angle: 45},
             {angle: 50},
         ];
-        this.sensorDist = 100;
+        this.sensorDist = 250;
+	this.roleMap = {
+	  agent: 1,
+          xp: 2,
+          shot: 3,
+          wall: 4
+	};
     }
 
     constructor(x, y, controller, engine) {
@@ -54,6 +60,28 @@ class Agent {
     }
 
     iterate(e) {
+	connection.send({
+		agentId: 1,
+		messageType: 'frame',
+                sensors: this.sensors,
+		x: this.body.position.x,
+		y: this.body.position.y,
+		dX: this.body.velocity.x,
+		dY: this.body.velocity.y,
+		canShoot: this.canShoot(e.timestamp),
+		xp: this.xp,
+	});
+	clientState = {
+		agentId: 1,
+		messageType: 'frame',
+                sensors: this.sensors,
+		x: this.body.position.x,
+		y: this.body.position.y,
+		dX: this.body.velocity.x,
+		dY: this.body.velocity.y,
+		canShoot: this.canShoot(e.timestamp),
+		xp: this.xp,
+	};
         var inputs = this.controller.iterate();
 
         this.look(inputs);
@@ -125,10 +153,10 @@ class Agent {
 
         if (collisions.length > 0) {
             sensor.length = Matter.Vector.magnitude(Matter.Vector.sub(collisions[0].point, this.body.position));
-            sensor.hitting = collisions[0].body.role || 'wall';
+            sensor.hitting = this.roleMap[collisions[0].body.role || 'wall'];
         } else {
             sensor.length = this.sensorDist;
-            sensor.hitting = '';
+            sensor.hitting = 0;
         }
     }
 

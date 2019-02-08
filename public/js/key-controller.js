@@ -31,6 +31,7 @@ class KeyController {
     }
 
     iterate() {
-        return this.inputs;
+	return clientControl;
+        //return this.inputs;
     }
 }

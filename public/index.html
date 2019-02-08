@@ -9,18 +9,29 @@
         <script type="text/javascript" src="js/xp.js"></script>
         <script type="text/javascript" src="js/shot.js"></script>
         <script type="text/javascript" src="js/key-controller.js"></script>
+	<script type="text/javascript" src="js/dummy-controller.js"></script>
+	<script type="text/javascript">
         <script type="text/javascript" src="js/dummy-controller.js"></script>
         <script type="text/javascript" src="js/world.js"></script>
         <script type="text/javascript">
+	    var clientState = {};
+	    var clientControl = {};
+	    window.WebSocket = window.WebSocket || window.MozWebSocket;
+	    var connection = new WebSocket('ws://localhost:3000');
             var game = {};
             window.onload=function() {
                 game = new GameWorld(2000, 1200, document.body);
 
                 var agent = new Agent(400, 300, new KeyController(), game.engine);
 
-                game.spawnXp(40);
+                game.spawnXp(100);
 
 		game.run();
+
+                connection.onmessage = function (message) {
+                  var json = JSON.parse(message.data);
+	          console.log(json);
+                };
             }
         </script>
     </head>
