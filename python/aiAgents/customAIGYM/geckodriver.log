@@ -1,0 +1,6 @@
+1549233718029	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile.SFFqQqxatDwx"
+1549233719580	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: resource://pdf.js/
+1549233719581	addons.webextension.screenshots@mozilla.org	WARN	Loading extension 'screenshots@mozilla.org': Reading manifest: Invalid host permission: about:reader*
+1549233726240	Marionette	INFO	Listening on port 46457
+1549233726377	Marionette	WARN	TLS certificate errors will be ignored for this session
+1549233728892	Marionette	INFO	Stopped listening on port 46457

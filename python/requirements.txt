@@ -1,0 +1,16 @@
+Cython==0.29.4
+pyOpenSSL==19.0.0
+cryptography==2.5
+protobuf==3.6.1
+gym==0.10.11
+ipaddr==2.2.0
+keras==2.2.4
+mock==2.0.0
+numpy==1.16.1
+ordereddict==1.1
+pandas==0.24.0
+pyknow==1.7.0
+rl==2.4
+simplejson==3.16.0
+splinter==0.10.0
+wincertstore==0.2
