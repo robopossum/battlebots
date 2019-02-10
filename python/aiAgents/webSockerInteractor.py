@@ -60,10 +60,15 @@ if __name__ == "__main__":
     test = webSocketInteractor()
     test.sendMessage("Yo")
 
-    for x in tqdm(range(1, 1000)):
+    for x in tqdm(range(0, 100000)):
         action = mapAction(random.randint(0, 7))
         test.sendMessage(action)
         state = test.getMsg()
+
+        if state['xp'] >= 90:
+            print("Done!")
+            break
+
     print(state)
     test.closeCon()
 
