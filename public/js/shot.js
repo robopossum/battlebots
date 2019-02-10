@@ -1,3 +1,4 @@
+var Matter = require( "../../node_modules/matter-js");
 class Shot {
     constructor(emitter, angle, speed, range, engine) {
         this.engine = engine;
@@ -52,3 +53,5 @@ class Shot {
         }
     }
 }
+
+module.exports = Shot;

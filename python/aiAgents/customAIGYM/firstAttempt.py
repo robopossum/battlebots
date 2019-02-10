@@ -48,9 +48,9 @@ from gym.utils import seeding
 class FooEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self, noEpisodes=1000):
+    def __init__(self, noEpisodes=1000, headless=True):
         self.browser = None
-        self.reset()
+        self.reset(headless)
         self.noEpisodes = noEpisodes
         time.sleep(5)
         pass
@@ -68,11 +68,13 @@ class FooEnv(gym.Env):
         #self.LSTMStateUpdate(ProcessState(self.rawState))
         return ProcessState(self.rawState), step_reward, done, {}
 
-    def reset(self):
+    def reset(self, headless=True):
         self.memState = np.zeros((50, 47))
         self.iterations = 0
         if self.browser is None:
-            browser = splinter.Browser()
+            kwargs= {'executable_path':'C:/Users/mainuser/Documents/GitHub/battlebots/webDriver/geckodriver.exe',
+                     'headless': headless}
+            browser = splinter.Browser('firefox', **kwargs)
             time.sleep(5)
             browser.visit("http://localhost:3000")
             self.browser = browser
@@ -188,23 +190,3 @@ def ProcessState(state):
     distAr = [x['length'] for x in ret['sensors']]
     del ret['sensors']
     return np.array(list(ret.values()) + hittingAr + distAr)
-
-# ProcessState(state)
-
-# print(memState)
-
-
-# import gym
-# from gym import error, spaces, utils
-# from gym.utils import seeding
-
-# class FooEnv(gym.Env):
-#   metadata = {'render.modes': ['human']}
-
-#   def __init__(self):
-#     ...
-#   def step(self, action):
-#     ...
-#   def reset(self):
-#     ...
-#   def render(self, mode='human', close=False):

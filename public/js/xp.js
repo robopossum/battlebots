@@ -1,3 +1,4 @@
+var Matter = require( "../../node_modules/matter-js");
 class XP {
     constructor(x, y, engine) {
         this.engine = engine;
@@ -28,4 +29,10 @@ class XP {
             }
         }
     }
+}
+
+exports.XP = function(x, y, engine) {
+    var ret = new XP(x, y, engine);
+    return ret;
+  
 }

@@ -31,7 +31,7 @@ nb_actions = 7
 # Next, we build a very simple model.
 model = Sequential()
 
-model.add(Dense(47, input_shape=(47, )))
+model.add(Dense(47, input_shape=(50, 47)))
 #model.add(ReShape())
 model.add(Activation('relu'))
 #model.add(Flatten(input_shape=(1,) + (47,), batch_input_shape=((47,1, 24))))
@@ -99,22 +99,18 @@ from keras.models import Model
 
 
 
+import keras
 
-
-main_input = Input(shape=(100,), dtype='int32', name='main_input')
+main_input = Input(shape=(47,), dtype='int32', name='main_input')
 
 # This embedding layer will encode the input sequence
 # into a sequence of dense 512-dimensional vectors.
-x = Embedding(output_dim=512, input_dim=10000, input_length=100)(main_input)
+x = Embedding(output_dim=512, input_dim=10000, input_length=47)(main_input)
 
 # A LSTM will transform the vector sequence into a single vector,
 # containing information about the entire sequence
 lstm_out = LSTM(32)(x)
 
-auxiliary_output = Dense(1, activation='sigmoid', name='aux_output')(lstm_out)
-
-auxiliary_input = Input(shape=(5,), name='aux_input')
-x = keras.layers.concatenate([lstm_out, auxiliary_input])
 
 # We stack a deep densely-connected network on top
 x = Dense(64, activation='relu')(x)
@@ -122,14 +118,14 @@ x = Dense(64, activation='relu')(x)
 x = Dense(64, activation='relu')(x)
 
 # And finally we add the main logistic regression layer
-main_output = Dense(1, activation='sigmoid', name='main_output')(x)
-model = Model(inputs=[main_input, auxiliary_input], outputs=[main_output, auxiliary_output])
+main_output = Dense(7, activation='softmax', name='main_output')(x)
+model = Model(inputs=main_input, outputs=main_output)
 
 model.compile(optimizer='rmsprop', loss='binary_crossentropy',
-              loss_weights=[1., 0.2])
+              loss_weights=[1])
 
 
 
-model.fit([headline_data, additional_data], [labels, labels],
+model.fit(headline_data, labels,
           epochs=50, batch_size=32)
 

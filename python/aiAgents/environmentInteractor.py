@@ -18,7 +18,8 @@ class browserEnvironment():
     def resetEnvironment(self):
         if self.browser is not None:
             self.browser.quit()
-        browser = splinter.Browser()
+        executable_path = {'executable_path':'C:/Users/mainuser/Documents/GitHub/battlebots/webDriver/geckodriver.exe'}
+        browser = splinter.Browser('firefox', **executable_path)
         time.sleep(5)
         browser.visit("http://localhost:3000")
         time.sleep(5)

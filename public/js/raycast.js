@@ -12,6 +12,10 @@
 //param 'start' - start point of raycast
 //param 'end' - end point of raycast
 //param 'sort' - whether or not the ray collisions should be
+
+var Matter = require( "../../node_modules/matter-js");
+
+
 //    sorted based on distance from the origin
 function raycast(bodies, start, end, sort = true){
     //convert the start & end parameters to my custom
@@ -316,3 +320,6 @@ class vec2{
         return "vector<" + this.x + ", " + this.y + ">";
     }
 }
+
+
+module.exports = raycast;

@@ -28,7 +28,8 @@ def playGame():
     # now we see how we have done in 100 steps;
     environment.takeAction(expertSystemAgent.templateControlObject)
     stateScore = environment.getState()['xp']
-    print("In {} steps, we were able to score {} xp".format(noSteps, stateScore))
+    print("In {} steps, we were able to score {} xp".format(noSteps,
+          stateScore))
 #    environment.browser.quit()
     environment.browser.reload()
     return stateScore

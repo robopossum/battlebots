@@ -1,3 +1,9 @@
+var Matter = require( "../../node_modules/matter-js");
+var _ = require( "../../node_modules/underscore");
+var raycast = require("./raycast.js");
+var Shot = require("./shot.js");
+
+
 class Agent {
     defaults() {
         this.size = 20;
@@ -43,9 +49,10 @@ class Agent {
 	};
     }
 
-    constructor(x, y, controller, engine) {
+    constructor(x, y, controller, engine, connection) {
         this.defaults();
 
+        this.connection = connection;
         this.controller = controller;
         this.engine = engine;
 
@@ -60,7 +67,7 @@ class Agent {
     }
 
     iterate(e) {
-	connection.send({
+	this.connection.send({
 		agentId: 1,
 		messageType: 'frame',
                 sensors: this.sensors,
@@ -71,7 +78,7 @@ class Agent {
 		canShoot: this.canShoot(e.timestamp),
 		xp: this.xp,
 	});
-	clientState = {
+	this.clientState = {
 		agentId: 1,
 		messageType: 'frame',
                 sensors: this.sensors,
@@ -102,6 +109,7 @@ class Agent {
         if (inputs.shoot && this.canShoot(e.timestamp)) {
             this.shoot(e.timestamp);
         }
+    return this.clientState;
     }
 
     damaged(shot) {
@@ -185,3 +193,7 @@ class Agent {
         return (timestamp - this.lastShot) > this.shotCd;
     }
 }
+
+
+
+module.exports = Agent;

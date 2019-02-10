@@ -19,8 +19,8 @@ class KeyController {
             shoot: false
         };
 
-        document.addEventListener('keydown', this.handleKeys.bind(this));
-        document.addEventListener('keyup', this.handleKeys.bind(this));
+        // document.addEventListener('keydown', this.handleKeys.bind(this));
+        // document.addEventListener('keyup', this.handleKeys.bind(this));
     }
 
     handleKeys(event) {
@@ -31,7 +31,11 @@ class KeyController {
     }
 
     iterate() {
-	return clientControl;
-        //return this.inputs;
+	// return clientControl;
+        return this.inputs;
     }
 }
+
+
+
+module.exports = KeyController;

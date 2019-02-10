@@ -5,7 +5,7 @@ Created on Sun Feb  3 00:32:52 2019
 
 @author: tom
 """
-from pyknow import *
+from pyknow import Fact, DefFacts, Rule, KnowledgeEngine
 import pandas as pd
 from datetime import datetime as dt
 import random
@@ -46,18 +46,15 @@ class expertSystemBasedAgent(KnowledgeEngine):
  #       print("Checking Sensors :", dt.now().isoformat())
         # TODO we need to check if we are hitting food, an enemy, walls or exp
         # we see if we can see anything at all
-        self.declare(Fact(seeNothing=((len(df[df['hitting']==0]) == 21))))
+        self.declare(Fact(seeNothing=((len(df[df['hitting'] == 0]) == 21))))
 
         # we see if we can see exp;
-        self.declare(Fact(seeExp=((len(df[df['hitting']==2]) != 0))))
+        self.declare(Fact(seeExp=((len(df[df['hitting'] == 2]) != 0))))
 
         # we see if we can see a wall;
-        self.declare(Fact(seeWall=((len(df[df['hitting']==4]) != 0))))
-
+        self.declare(Fact(seeWall=((len(df[df['hitting'] == 4]) != 0))))
 
         self.retract(action)
-
-
 
     # rule 2
     @Rule('action' << Fact(seeExp=True))
@@ -66,18 +63,15 @@ class expertSystemBasedAgent(KnowledgeEngine):
         self.declare(Fact(action='exploit'))
         self.retract(action)
 
-#
-
-
     # rule 3
     @Rule('action' << Fact(seeNothing=True))
     def makeRandomMove(self, action):
         #print("Making Random Explore move")
         self.controlObject = templateControlObject.copy()
-        choice = (random.choice(['up', 'up', 'up', 'up', 'up', 'up', 'turnLeft', 'turnRight']))
+        choice = (random.choice(['up', 'up', 'up', 'up', 'up',
+                                 'up', 'turnLeft', 'turnRight']))
         self.controlObject[choice] = 1
         self.retract(action)
-
 
     # rule 3
     @Rule('action' << Fact(seeWall=True))
@@ -96,7 +90,6 @@ class expertSystemBasedAgent(KnowledgeEngine):
             self.controlObject['turnRight'] = 1
             self.controlObject['down'] = 1
         self.retract(action)
-
 
 
     @Rule('fact' << Fact(action='exploit'),

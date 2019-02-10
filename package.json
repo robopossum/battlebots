@@ -11,7 +11,10 @@
   "dependencies": {
     "express": "^4.16.4",
     "matter-js": "^0.14.2",
+    "package.json": "^2.0.1",
     "pathseg": "^1.2.0",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "uuid": "^3.3.2",
+    "websocket": "^1.0.28"
   }
 }
